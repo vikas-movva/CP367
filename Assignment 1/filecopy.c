@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[]) {
     FILE *source, *destination;
-    char ch;
+    int ch;
 
     // Check if the file names are provided
     if(argc != 3) {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Read from the source file and write to the destination file
-    while ((ch = fgetc(source)) != EOF) {
+    while ((ch = fgetc(source)) != -1) {
         fputc(ch, destination);
     }
 
