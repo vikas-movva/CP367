@@ -1,16 +1,16 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-int count_words(char *filename)
+void count_words(char *filename)
 {
     FILE *file = fopen(filename, "r");
     if (file == NULL)
     {
-        printf("Cannot open file %s\n", filename);
-        return 1;
+        printf("\n%s cannot be opened\n\n", filename);
+        return;
     }
-
+    printf("\nContent of %s:\n", filename);
+    printf("\n");
     int ch, prev_ch = '\0', lines = 0, words = 0, chars = 0;
     while ((ch = fgetc(file)) != EOF)
     {
@@ -37,12 +37,11 @@ int count_words(char *filename)
         lines++;
     }
 
-    printf("\nLines: %d\n", lines);
-    printf("Words: %d\n", words);
-    printf("Average words per line: %.2f\n", (float)words / lines);
+    printf("\n\nNumber of lines of file1: %d\n", lines);
+    printf("Number of words of file1: %d\n", words);
+    printf("Average number of words per line of file1: %.2f\n\n", (float)words / lines);
 
     fclose(file);
-    return 0;
 }
 
 int main()
@@ -53,33 +52,29 @@ int main()
     do
     {
         printf("Enter command (f: enter file name, q: quit): ");
-        fgets(command, 256, stdin);
-        if (strlen(command) == 2)
-        {
+        fgets(command, 256, stdin);          // read the entire line of input
+        command[strcspn(command, "\n")] = 0; // remove the newline character at the end of the string
 
-            switch (command[0])
-            {
-            case 'f':
-                printf("Enter file name: ");
-                scanf("%s", filename);
-                count_words(filename);
-                if (count_words(filename) == 1)
-                {
-                    break;
-                }
-            case 'q':
-                printf("Quitting program.\n");
-                break;
-            default:
-                printf("Invalid command.\n");
-            }
+        if (strlen(command) == 0)
+        {
+            continue; // ignore empty commands
+        }
+
+        if (strcmp(command, "f") == 0)
+        {
+            printf("Enter file name: ");
+            fgets(filename, 256, stdin);
+            filename[strcspn(filename, "\n")] = 0; // remove the newline character at the end of the string
+            count_words(filename);
+        }
+        else if (strcmp(command, "q") == 0)
+        {
+            printf("\nGood bye\n");
         }
         else
         {
             printf("Invalid command.\n");
         }
-
-    } while (*command != 'q');
-
+    } while (strcmp(command, "q") != 0);
     return 0;
 }
